@@ -3,38 +3,186 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="./src/css/style.css" />
+    <title>Heart locked</title>
+    <link rel="stylesheet" href="./src/css/pass.css" />
+    <style>
+      #snowflakeContainer {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+      }
+      .snowflake {
+        padding-left: 15px;
+        font-size: 14px;
+        line-height: 24px;
+        position: fixed;
+        color: #ebebeb;
+        user-select: none;
+        z-index: 1000;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        -khtml-user-select: none;
+        -webkit-user-select: none;
+        -webkit-touch-callout: none;
+      }
+      .snowflake:hover {
+        cursor: default;
+      }
+    </style>
   </head>
   <body>
-    <main>
-      <div class="scrollbar"></div>
-      <div class="container">
-        <p>
-          In the enchanted world of frontend development, pixels and code guide
-          your design journey. Entranced by the dance of colors, shapes unfold
-          on the digital canvas. Every line of code is a spell, weaving
-          functionality and aesthetics into an immersive digital tale.
-        </p>
-        <p>
-          In the enchanted world of frontend development, pixels and code guide
-          your design journey. Entranced by the dance of colors, shapes unfold
-          on the digital canvas. Every line of code is a spell, weaving
-          functionality and aesthetics into an immersive digital tale.
-        </p>
-        <p>
-          In the enchanted world of frontend development, pixels and code guide
-          your design journey. Entranced by the dance of colors, shapes unfold
-          on the digital canvas. Every line of code is a spell, weaving
-          functionality and aesthetics into an immersive digital tale.
-        </p>
-        <p>
-          In the enchanted world of frontend development, pixels and code guide
-          your design journey. Entranced by the dance of colors, shapes unfold
-          on the digital canvas. Every line of code is a spell, weaving
-          functionality and aesthetics into an immersive digital tale.
-        </p>
+    <div id="lock-container">
+      <h2>Enter 6-Digit Password:</h2>
+      <div>
+        <input
+          type="password"
+          id="passwordInput"
+          maxlength="6"
+          onkeypress="handleKeyPress(event)"
+        />
+        <span id="showPassword" onclick="togglePasswordVisibility()"> </span>
       </div>
-    </main>
+      <button onclick="checkPassword()">Submit</button>
+      <p id="error-message"></p>
+    </div>
+
+    <div id="entry-box">
+      <div id="snowflakeContainer">
+        <p class="snowflake">❄</p>
+      </div>
+      <div class="letter">
+        <h2>Gửi: Công chúa Ngân</h2>
+        <p>
+          Năm mới đến rồi, anh muốn gửi đến em lời chúc tốt đẹp nhất. Cảm ơn em
+          đã luôn ở bên anh, yêu thương anh và chia sẻ mọi buồn vui cùng anh
+          trong suốt một năm qua. Em chính là người khiến anh hạnh phúc và yêu
+          đời hơn mỗi ngày. Năm mới này, anh mong rằng em sẽ luôn khỏe mạnh,
+          xinh đẹp và thành công trong mọi công việc. Anh cũng mong rằng tình
+          yêu của chúng ta sẽ mãi mãi bền chặt, đi cùng năm tháng.
+        </p>
+        <span id="love">Yêu em nhiều!</span>
+        <h3 id="create">MDC <br />Ngày 01, tháng 01, năm 2024</h3>
+      </div>
+      <div class="container">
+        <img
+          src="./assets/img/trai.png"
+          alt="Ảnh của bạn"
+          class="bottom-left-image"
+        />
+        <!-- Your content for the entry box goes here -->
+      </div>
+
+      <!-- Nội dung khác trong container -->
+      <div id="my-div">
+        <audio autoplay loop>
+          <source src="./assets/audio/vthty.mp3" type="audio/mp3" />
+        </audio>
+      </div>
+    </div>
+    <script>
+      //<![CDATA[
+      var requestAnimationFrame =
+        window.requestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.msRequestAnimationFrame;
+      var transforms = [
+        "transform",
+        "msTransform",
+        "webkitTransform",
+        "mozTransform",
+        "oTransform",
+      ];
+      var transformProperty = getSupportedPropertyName(transforms);
+      var snowflakes = [];
+      var browserWidth;
+      var browserHeight;
+      var numberOfSnowflakes = 50;
+      var resetPosition = false;
+      function setup() {
+        window.addEventListener("DOMContentLoaded", generateSnowflakes, false);
+        window.addEventListener("resize", setResetFlag, false);
+      }
+      setup();
+      function getSupportedPropertyName(b) {
+        for (var a = 0; a < b.length; a++) {
+          if (typeof document.body.style[b[a]] != "undefined") {
+            return b[a];
+          }
+        }
+        return null;
+      }
+      function Snowflake(b, a, d, e, c) {
+        this.element = b;
+        this.radius = a;
+        this.speed = d;
+        this.xPos = e;
+        this.yPos = c;
+        this.counter = 0;
+        this.sign = Math.random() < 0.5 ? 1 : -1;
+        this.element.style.opacity = 0.5 + Math.random();
+        this.element.style.fontSize = 4 + Math.random() * 30 + "px";
+      }
+      Snowflake.prototype.update = function () {
+        this.counter += this.speed / 5000;
+        this.xPos += (this.sign * this.speed * Math.cos(this.counter)) / 40;
+        this.yPos += Math.sin(this.counter) / 40 + this.speed / 30;
+        setTranslate3DTransform(
+          this.element,
+          Math.round(this.xPos),
+          Math.round(this.yPos)
+        );
+        if (this.yPos > browserHeight) {
+          this.yPos = -50;
+        }
+      };
+      function setTranslate3DTransform(a, c, b) {
+        var d = "translate3d(" + c + "px, " + b + "px, 0)";
+        a.style[transformProperty] = d;
+      }
+      function generateSnowflakes() {
+        var b = document.querySelector(".snowflake");
+        var h = b.parentNode;
+        browserWidth = document.documentElement.clientWidth;
+        browserHeight = document.documentElement.clientHeight;
+        for (var d = 0; d < numberOfSnowflakes; d++) {
+          var j = b.cloneNode(true);
+          h.appendChild(j);
+          var e = getPosition(50, browserWidth);
+          var a = getPosition(50, browserHeight);
+          var c = 5 + Math.random() * 40;
+          var g = 4 + Math.random() * 10;
+          var f = new Snowflake(j, g, c, e, a);
+          snowflakes.push(f);
+        }
+        h.removeChild(b);
+        moveSnowflakes();
+      }
+      function moveSnowflakes() {
+        for (var b = 0; b < snowflakes.length; b++) {
+          var a = snowflakes[b];
+          a.update();
+        }
+        if (resetPosition) {
+          browserWidth = document.documentElement.clientWidth;
+          browserHeight = document.documentElement.clientHeight;
+          for (var b = 0; b < snowflakes.length; b++) {
+            var a = snowflakes[b];
+            a.xPos = getPosition(50, browserWidth);
+            a.yPos = getPosition(50, browserHeight);
+          }
+          resetPosition = false;
+        }
+        requestAnimationFrame(moveSnowflakes);
+      }
+      function getPosition(b, a) {
+        return Math.round(-1 * b + Math.random() * (a + 2 * b));
+      }
+      function setResetFlag(a) {
+        resetPosition = true;
+      }
+      //]]>
+    </script>
+    <script src="./src/js/pass.js"></script>
   </body>
 </html>
